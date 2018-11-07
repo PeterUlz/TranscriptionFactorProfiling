@@ -95,7 +95,7 @@ def step2(ERR_LOG,OUT_LOG,args,proj_dir,script_dir,filenames):
 def step3(ERR_LOG,OUT_LOG,args,proj_dir,script_dir,filenames):
     logging(OUT_LOG,"Step3   a) alignment")
     SAM = open(filenames["sam_file"],"w")
-    aln_value=subprocess.call([script_dir+"/Software/bwa","mem","-M","-t",str(args.threads),script_dir+"/Ref/hg19",filenames["trimmed_fastq"]],stderr=ERR_LOG,stdout=SAM)
+    aln_value=subprocess.call([script_dir+"/Software/bwa","mem","-M","-t",str(args.threads),args.bwa_idx,filenames["trimmed_fastq"]],stderr=ERR_LOG,stdout=SAM)
     SAM.close()
     if aln_value != 0:
         error_logging(ERR_LOG,"Error in alignment")
@@ -150,6 +150,10 @@ parser.add_argument('-t','--threads', dest='threads',
                    help='No. threads for alignment [default: 1]',type=int,default=1)
 parser.add_argument('-step','--start-step', dest='start_step',
                    help='Start at this step',type=int,default=1)
+parser.add_argument('-idx','--bwa-index', dest='bwa_idx',
+                   help='BWA index prefix',required=True)
+parser.add_argument('-tmp','--tmp-dir', dest='temp_dir',
+                   help='Directory for temporary file [default: /tmp]',default="/tmp")
 
 args = parser.parse_args()
 checkArgs(args)
@@ -166,16 +170,6 @@ filenames["sam_file"] = proj_dir+"/"+args.name+".sam"
 filenames["bam_file"] = proj_dir+"/"+args.name+".bam"
 filenames["bam_file_rmdup"] = proj_dir+"/"+args.name+".rmdup.bam"
 filenames["bam_file_rmdup_stats"] = proj_dir+"/"+args.name+".rmdup.bam.stats"
-
-filenames["housekeeping_profile"] = proj_dir+"/"+args.name+".housekeeping.tss"
-filenames["unexpressed_profile"] = proj_dir+"/"+args.name+".unexpressed.tss"
-filenames["profile_plot"] = proj_dir+"/"+args.name+".tss_profile.png"
-
-filenames["coverage_2k_tss"] = proj_dir+"/"+args.name+".2k-tss.txt"
-filenames["coverage_ndr_tss"] = proj_dir+"/"+args.name+".ndr-tss.txt"
-
-filenames["prediction_folder"] = proj_dir+"/Prediction"
-
 
 #####################################################################################################
 # Start analysis
@@ -200,19 +194,4 @@ if (args.start_step <= 4):
     step4(ERR_LOG,OUT_LOG,args,proj_dir,script_dir,filenames)
 else:
     logging(OUT_LOG, "Skip PCR duplicate removal")
-
-if (args.start_step <= 5):
-    step5(ERR_LOG,OUT_LOG,args,proj_dir,script_dir,filenames)
-else:
-    logging(OUT_LOG, "Skip TSS profile generation")
-
-if (args.start_step <= 6):
-    step6(ERR_LOG,OUT_LOG,args,proj_dir,script_dir,filenames)
-else:
-    logging(OUT_LOG, "Skip parameter extraction")
-
-if (args.start_step <= 7):
-    step7(ERR_LOG,OUT_LOG,args,proj_dir,script_dir,filenames)
-else:
-    logging(OUT_LOG, "Skip expression prediction")
 

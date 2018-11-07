@@ -41,10 +41,6 @@ if not os.path.isdir(args.name):
     os.mkdir(args.name)
 
 ####################################################################################################
-# TODO:
-#  -) better implement hg38 support
-#  -) add standard TSS (housekeeping and unexpressed) analysis
-####################################################################################################
 # get genomewide coverage from bedtools genomecoverage
 if args.calc_cov:
     print "Calc avg. coverage"
@@ -141,14 +137,14 @@ def ctcf(args,avg_coverage):
     #     "NonTADs","0",str(args.ylimit)])
     #call(["Rscript","./Scripts/plot_MotifCoverage_2sample.R",args.name.rstrip("/")+"/CTCF"+"/CTCF_In_Insulated_Neighbourhoods.tss",args.name.rstrip("/")+"/CTCF"+"/CTCF_Outside_Insulated_Neighbourhoods.tss",
     #      args.name.rstrip("/")+"/CTCF"+"/CTCF_TADs.png","CTCF  sites in TAD boundaries","CTCF  sites outside TAD boundaries","0",str(args.ylimit)])
-
+#########################################################################
 def tf_gtrd_1000sites(args,avg_coverage):
     print("Analyze Transcription factors GTRD")
     if not os.path.isdir(args.name.rstrip("/")+"/TranscriptionFactors"):
         os.mkdir(args.name.rstrip("/")+"/TranscriptionFactors")
     if not os.path.isdir(args.name.rstrip("/")+"/TranscriptionFactors/GTRD_ChIP_Only_1000sites"):
         os.mkdir(args.name.rstrip("/")+"/TranscriptionFactors/GTRD_ChIP_Only_1000sites")
-    target_list = glob.glob("./Ref/TranscriptionFactors/GTRD_1000sites/*.bed")
+    target_list = glob.glob("./Ref/GTRD_1000sites/*.bed")
     for tf in target_list:
         tf_name = os.path.basename(tf[:-4])
         if os.path.isfile(args.name.rstrip("/")+"/TranscriptionFactors/GTRD_ChIP_Only_1000sites"+"/"+tf_name+".tss"):
@@ -160,17 +156,17 @@ def tf_gtrd_1000sites(args,avg_coverage):
         call(["Rscript","./Scripts/plot_MotifCoverage.R",args.name.rstrip("/")+"/TranscriptionFactors/GTRD_ChIP_Only_1000sites"+"/"+tf_name+".tss",args.name.rstrip("/")+"/TranscriptionFactors/GTRD_ChIP_Only_1000sites"+"/"+tf_name+".png",tf_name,"0",str(args.ylimit)])
         #call(["Rscript","./Scripts/plot_MotifCoverage_2sample.R",args.name.rstrip("/")+"/TranscriptionFactors/ENCODE_ChIP"+"/"+tf+".tss","./Ref/TranscriptionFactors/MergedMaleProfiles/"+tf+".tss",
         #    args.name.rstrip("/")+"/TranscriptionFactors/ENCODE_ChIP/"+tf+"_control.png",tf+" ("+args.name+")",tf+" (MergedMale)","0",str(args.ylimit)])
-
-def tf_gtrd_chip_only(args,avg_coverage):
+#########################################################################
+def tf_gtrd(args,avg_coverage):
     print "Analyze Transcription factors GTRD"
     if not os.path.isdir(args.name.rstrip("/")+"/TranscriptionFactors"):
         os.mkdir(args.name.rstrip("/")+"/TranscriptionFactors")
     if not os.path.isdir(args.name.rstrip("/")+"/TranscriptionFactors/GTRD_ChIP_Only"):
         os.mkdir(args.name.rstrip("/")+"/TranscriptionFactors/GTRD_ChIP_Only")
     if args.hg38:
-        target_list = glob.glob("./Ref/TranscriptionFactors/GTRD/hg38/*hg38.bed")
+        target_list = glob.glob("./Ref/GTRD/hg38/*hg38.bed")
     else:
-        target_list = glob.glob("./Ref/TranscriptionFactors/GTRD/*hg19.bed")
+        target_list = glob.glob("./Ref/GTRD/*hg19.bed")
     for tf in target_list:
         tf_name = os.path.basename(tf[:-4])
         if os.path.isfile(args.name.rstrip("/")+"/TranscriptionFactors/GTRD_ChIP_Only"+"/"+tf_name+".tss"):
@@ -271,8 +267,8 @@ elif args.analysis == "androgen":
     androgen(args,avg_coverage)
 elif args.analysis == "ctcf":
     ctcf(args,avg_coverage)
-elif args.analysis == "tf_gtrd_chip_only":
-    tf_gtrd_chip_only(args,avg_coverage)
+elif args.analysis == "tf_gtrd":
+    tf_gtrd(args,avg_coverage)
 elif args.analysis == "tf_gtrd_1000sites":
     tf_gtrd_1000sites(args,avg_coverage)
 else:
@@ -280,9 +276,9 @@ else:
     print " Use any of:"
     print "   -) all"
     print "   -) ctcf"
-    print "   -) quadruplex"
-    print "   -) tf"
-    print "   -) histone"
-    print "   -) enhancer"
+    print "   -) androgen"
+    print "   -) tf_gtrd"
+    print "   -) tf_gtrd_1000sites"
+    print "   -) tf_tss"
 
     

@@ -5,15 +5,15 @@ Raw sequencing data is trimmed to contain bases 53-113 (i.e. the central 60bp in
 
 In a second step, coverage data around transcription factor binding sites are averaged and the activity for each transcription factor is calculated.
 
-Transcription factor binding sites are taken from GTRD database
+Transcription factor binding sites are taken from GTRD database (http://gtrd.biouml.org/)
 
 ## Preparation:
 Software needed:
-* bedtools (v2.26.0)
+* bedtools (v2.24.0)
 * bwa (0.7.4-r385)
 * samtools (v 1.3)
-* fastx_trimmer
-* picard 
+* fastx_trimmer (0.0.13)
+* picard (as jar file)
 
 Binaries should be put in ./Software/
 
@@ -35,10 +35,14 @@ This corresponds to the .segments data produced by Plasma-Seq
 
 
 ## Run coverage analysis over all transcription factors in GTRD
+In the next step, 
 `
 usage: run_tf_analyses_from_bam.py [-h] -b BAM_FILE -o NAME  
                                    [-cov MEAN_COVERAGE] [-ylimit YLIMIT]  
                                    [-norm-file NORM_LOG2] [-calccov] [-hg38]  
                                    -a ANALYSIS [-tf TF]  
 `
+
+## Calculate Accessibility per TF
+
 
