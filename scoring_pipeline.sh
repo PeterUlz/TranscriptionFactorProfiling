@@ -18,10 +18,9 @@ done
 echo "Adjust amplitudes by loess smoothing"
 Rscript ./Scripts/loess_adjust_high_freq.R ${1}/AccessibilityOutput/${2}_AccessibilityAllHighFreq.txt ${1}/AccessibilityOutput/${2}_AccessibilityAllHighFreqAdjusted_tmp.txt ${1}/AccessibilityOutput/${2}_loess_highfreq_all.png
 
-echo -e "TF_profile\tTFBindingSites\tHighFreqRange\tPeaks\tMeanPeakDistance\tMedianPeakDistance\tprior\tadjusted_range\tnormalized_adjusted_range\tadjusted_range_rank" > ${1}/AccessibilityOutput/${2}_AccessibilityAllHighFreqAdjusted.txt
+
 cat ${1}/AccessibilityOutput/${2}_AccessibilityAllHighFreqAdjusted_tmp.txt >> ${1}/AccessibilityOutput/${2}_AccessibilityAllHighFreqAdjusted.txt
 rm ${1}/AccessibilityOutput/${2}_AccessibilityAllHighFreqAdjusted_tmp.txt
-#./rank_diff_all.py ${2}/${2}_ActivityAdjustedExpr.txt
 
 
 ##########################################
@@ -53,13 +52,11 @@ do
     Rscript ./Scripts/activity_score_highfreq_signal_range.R $i $tf ${1}/AccessibilityOutput/${2}_Accessibility1KSites.txt
 done
 
-#echo "No loess smoothing is done, but ranks are calculated"
+#"No loess smoothing is done, but ranks are calculated"
 Rscript ./Scripts/ranks_1K.R ${1}/AccessibilityOutput/${2}_Accessibility1KSites.txt ${1}/AccessibilityOutput/${2}_Accessibility1KSitesAdjusted_tmp.txt
 
 echo -e "TF_profile\tTFBindingSites\tHighFreqRange\tPeaks\tMeanPeakDistance\tMedianPeakDistance\tHighFreqRange_rank" > ${1}/AccessibilityOutput/${2}_Accessibility1KSitesAdjusted.txt
 cat ${1}/AccessibilityOutput/${2}_Accessibility1KSitesAdjusted_tmp.txt >> ${1}/AccessibilityOutput/${2}_Accessibility1KSitesAdjusted.txt
 rm ${1}/AccessibilityOutput/${2}_Accessibility1KSitesAdjusted_tmp.txt
-
-#./rank_diff_all.py ${2}/${2}_ActivityAdjustedExpr.txt
 
 

@@ -18,9 +18,22 @@ Software needed:
 Binaries should be put in ./Software/
 
 ## Trim and align
+FastQ files are trimmed stripping away anything between base 53-113. This should still contain the most central 60bp of a hypothetical 166 bp fragment and thus be the
+portion of the fragment that is closest to the nucleosome dyad. 
+
 `
 usage: trim_and_align.py [-h] -fq FASTQ_FILE -s NAME [-o OUTDIR] [-k]
                          [-t THREADS] [-step START_STEP]
+`
+
+## Trim from BAM file
+Single-end aligned BAM files can also be diretly manipulated uing trim_from_bam_single_end.py
+This is useful when the FastQ files are short than 113 bp.
+However, in order to increase speed the BAM loses a lot of details: CIGAR strings, sequence is replaced with all "A"s (in order not to
+look up the reference sequence)
+The trimmed BAM is still good for coverage analyses, though.  
+`
+usage: trim_from_bam_single_end.py [-h] -i IN_FILE -o OUT_FILE -l LENGTH
 `
 
 ## Calculate copy-number alterations
@@ -35,7 +48,8 @@ This corresponds to the .segments data produced by Plasma-Seq
 
 
 ## Run coverage analysis over all transcription factors in GTRD
-In the next step, 
+In the next step, average coverages around defined transcription factor binding sites are calculated  
+
 `
 usage: run_tf_analyses_from_bam.py [-h] -b BAM_FILE -o NAME  
                                    [-cov MEAN_COVERAGE] [-ylimit YLIMIT]  
@@ -44,5 +58,9 @@ usage: run_tf_analyses_from_bam.py [-h] -b BAM_FILE -o NAME
 `
 
 ## Calculate Accessibility per TF
+After average coverages around TF binding sites have been calculated, we can estimate the accessibility by specifying the output folder of the step above
+`
+./scoring_pipeline.sh <output_folder> <sample name>
+`
 
 
