@@ -42,8 +42,10 @@ The output of this is directly fed into the subsequent program, where coverage
 One option to do this is Plasma-Seq (https://github.com/PeterUlz/PlasmaSeq).
 Other options could include: ichorCNA (https://github.com/broadinstitute/ichorCNA) or qDNAseq (https://bioconductor.org/packages/release/bioc/html/QDNAseq.html)
 
-However, make sure the input file for the following steps looks like this:
+However, make sure the input file for the following steps looks like this:  
+`
 <chr>TAB<start>TAB<end>TAB<Log2-ratio>
+`  
 This corresponds to the .segments data produced by Plasma-Seq
 
 
@@ -58,9 +60,11 @@ usage: run_tf_analyses_from_bam.py [-h] -b BAM_FILE -o NAME
 `
 
 ## Calculate Accessibility per TF
-After average coverages around TF binding sites have been calculated, we can estimate the accessibility by specifying the output folder of the step above
+After average coverages around TF binding sites have been calculated, we can estimate the accessibility by specifying the output folder of the step above and
+the respective sample name  
 `
 ./scoring_pipeline.sh <output_folder> <sample name>
-`
+`  
+
 
 
