@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 
 #Analyze read depth in comparison to transcription start
 
